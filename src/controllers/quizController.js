@@ -82,13 +82,19 @@ const getQuizzesAvailable = asyncHandler(async (req, res) => {
 // @route   GET /api/quizzes/:id
 // @access  Private
 const getQuizById = asyncHandler(async (req, res) => {
-    const quiz = await Quiz.findOne({ _id: req.params.id, school: req.schoolId }).populate('linkedMaterial');
-    if (quiz) {
-        res.json(quiz);
-    } else {
+    const quiz = await Quiz.findOne({ _id: req.params.id, school: req.schoolId });
+
+    if (!quiz) {
         res.status(404);
         throw new Error('Quiz not found');
     }
+
+    // Populate linkedMaterial if it exists
+    if (quiz.linkedMaterial) {
+        await quiz.populate('linkedMaterial');
+    }
+
+    res.json(quiz);
 });
 
 // @desc    Submit quiz attempt

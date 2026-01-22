@@ -1,8 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const compression = require('compression');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 const connectDB = require('./src/config/db');
-
 
 // Connect to database
 connectDB();
@@ -10,7 +13,28 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Security Middlewares
+app.use(helmet());
 app.use(cors());
+
+// Logging Middleware
+if (process.env.NODE_ENV === 'production') {
+    app.use(morgan('combined'));
+} else {
+    app.use(morgan('dev'));
+}
+
+// Compression
+app.use(compression());
+
+// Rate Limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again after 15 minutes'
+});
+app.use('/api/', limiter);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -54,6 +78,7 @@ app.use('/api/awards', require('./src/routes/awardRoutes'));
 app.use('/api/settings', require('./src/routes/settingRoutes'));
 app.use('/api/transport', require('./src/routes/transportRoutes'));
 app.use('/api/stats', require('./src/routes/statsRoutes'));
+app.use('/api/company', require('./src/routes/companyRoutes'));
 
 app.get('/', (req, res) => {
     res.send('School Management System API is running');
@@ -94,4 +119,29 @@ app.set('socketio', io);
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+});
+
+// Graceful Shutdown
+process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    server.close(() => {
+        console.log('HTTP server closed');
+        const mongoose = require('mongoose');
+        mongoose.connection.close(false, () => {
+            console.log('MongoDB connection closed');
+            process.exit(0);
+        });
+    });
+});
+
+process.on('SIGINT', () => {
+    console.log('SIGINT signal received: closing HTTP server');
+    server.close(() => {
+        console.log('HTTP server closed');
+        const mongoose = require('mongoose');
+        mongoose.connection.close(false, () => {
+            console.log('MongoDB connection closed');
+            process.exit(0);
+        });
+    });
 });

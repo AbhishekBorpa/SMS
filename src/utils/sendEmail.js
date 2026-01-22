@@ -19,11 +19,13 @@ const sendEmail = async (options) => {
         // Fallback to generating a test account
         const testAccount = await nodemailer.createTestAccount();
 
-        console.log('Ethereal Email Config Created (Add to .env to persist):');
-        console.log(`SMTP_HOST=smtp.ethereal.email`);
-        console.log(`SMTP_PORT=587`);
-        console.log(`SMTP_EMAIL=${testAccount.user}`);
-        console.log(`SMTP_PASSWORD=${testAccount.pass}`);
+        if (process.env.NODE_ENV !== 'production') {
+            console.log('Ethereal Email Config Created (Add to .env to persist):');
+            console.log(`SMTP_HOST=smtp.ethereal.email`);
+            console.log(`SMTP_PORT=587`);
+            console.log(`SMTP_EMAIL=${testAccount.user}`);
+            console.log(`SMTP_PASSWORD=${testAccount.pass}`);
+        }
 
         transporter = nodemailer.createTransport({
             host: 'smtp.ethereal.email',

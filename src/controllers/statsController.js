@@ -62,7 +62,6 @@ const getSchoolAnalytics = asyncHandler(async (req, res) => {
             facultyLeaderboard: activeTeachers
         };
 
-        console.log('Sending Analytics Response...');
         res.json(responseData);
 
     } catch (error) {
