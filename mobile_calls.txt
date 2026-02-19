@@ -1,0 +1,129 @@
+mobile/src/context/AuthContext.js:            const response = await axios.post(`${API_URL}/auth/login`, {
+mobile/src/context/AuthContext.js:            await axios.post(`${API_URL}/auth/change-password`, { currentPassword, newPassword }, config);
+mobile/src/context/AuthContext.js:        const interceptor = axios.interceptors.response.use(
+mobile/src/context/AuthContext.js:            axios.interceptors.response.eject(interceptor);
+mobile/src/screens/chat/ChatScreen.js:            const { data } = await axios.get(`${API_URL}/messages/${userId}`, config);
+mobile/src/screens/chat/ChatListScreen.js:            const { data } = await axios.get(`${API_URL}/messages/targets`, config);
+mobile/src/screens/lms/CourseListScreen.js:            const { data } = await axios.get(`${API_URL}/courses`, config);
+mobile/src/screens/lms/MyCoursesScreen.js:            const { data } = await axios.get(`${API_URL}/enrollment/my-courses`, config);
+mobile/src/screens/lms/AddModuleScreen.js:            await axios.put(`${API_URL}/courses/${courseId}`, {
+mobile/src/screens/lms/AddLessonScreen.js:            await axios.put(`${API_URL}/courses/${courseId}`, {
+mobile/src/screens/lms/CreateQuizScreen.js:            await axios.post(`${API_URL}/quizzes`, {
+mobile/src/screens/lms/CourseDetailScreen.js:            const { data: cert } = await axios.get(`${API_URL}/certificate/${courseId}`, config);
+mobile/src/screens/lms/CourseDetailScreen.js:            const { data } = await axios.get(`${API_URL}/courses/${courseId}`, config);
+mobile/src/screens/lms/CourseDetailScreen.js:            const { data } = await axios.get(`${API_URL}/quizzes/course/${courseId}`, config);
+mobile/src/screens/lms/CourseDetailScreen.js:            await axios.post(`${API_URL}/enrollment/${courseId}`, {}, config);
+mobile/src/screens/lms/CreateCourseScreen.js:            await axios.post(`${API_URL}/courses`, courseData, config);
+mobile/src/screens/lms/LessonViewScreen.js:            await axios.put(`${API_URL}/enrollment/lesson-complete`, { courseId, lessonId }, config);
+mobile/src/screens/studyMaterial/UploadMaterialScreen.js:            await axios.post(`${API_URL}/materials`, {
+Binary file mobile/src/screens/studyMaterial/.UploadMaterialScreen.js.swp matches
+mobile/src/screens/studyMaterial/StudyMaterialListScreen.js:            const { data } = await axios.get(`${API_URL}/materials`, config);
+mobile/src/screens/studyMaterial/StudyMaterialListScreen.js:                        await axios.delete(`${API_URL}/materials/${id}`, config);
+mobile/src/screens/gallery/GalleryListScreen.js:            const { data } = await axios.get(`${API_URL}/gallery`, config);
+mobile/src/screens/gallery/GalleryListScreen.js:                        await axios.delete(`${API_URL}/gallery/${id}`, config);
+mobile/src/screens/gallery/UploadPhotoScreen.js:            await axios.post(`${API_URL}/gallery`, {
+mobile/src/screens/student/AchievementsScreen.js:                axios.get(`${API_URL}/attendance/student/${await getUserId()}`, config).catch(() => ({ data: [] })),
+mobile/src/screens/student/AchievementsScreen.js:                axios.get(`${API_URL}/marks`, config).catch(() => ({ data: [] })),
+mobile/src/screens/student/AchievementsScreen.js:                axios.get(`${API_URL}/assignments`, config).catch(() => ({ data: [] }))
+mobile/src/screens/student/TimetableScreen.js:            const { data } = await axios.get(`${API_URL}/classes/student`, config);
+mobile/src/screens/student/StudentLeaveScreen.js:            const { data } = await axios.get(`${API_URL}/student-leave`, config);
+mobile/src/screens/student/StudentLeaveScreen.js:            await axios.post(`${API_URL}/student-leave`, application, config);
+mobile/src/screens/student/PerformanceAnalyticsScreen.js:                axios.get(`${API_URL}/attendance/student/${userInfo._id}`, config).catch(() => ({ data: [] })),
+mobile/src/screens/student/PerformanceAnalyticsScreen.js:                axios.get(`${API_URL}/marks`, config).catch(() => ({ data: [] }))
+mobile/src/screens/student/ChangePasswordScreen.js:            await axios.put(
+mobile/src/screens/student/LeaderboardScreen.js:            const { data } = await axios.get(`${API_URL}/quizzes/leaderboard/global`, config);
+mobile/src/screens/student/QuizListScreen.js:            const { data } = await axios.get(`${API_URL}/quizzes/available`, config);
+mobile/src/screens/student/StudentDashboard.js:                const attendanceRes = await axios.get(`${API_URL}/attendance/student/${userInfo._id}`, config);
+mobile/src/screens/student/StudentDashboard.js:                const marksRes = await axios.get(`${API_URL}/marks`, config);
+mobile/src/screens/student/StudentDashboard.js:                const assignmentsRes = await axios.get(`${API_URL}/assignments`, config);
+mobile/src/screens/student/StudentDashboard.js:                const noticesRes = await axios.get(`${API_URL}/notices`, config);
+mobile/src/screens/student/CanteenScreen.js:            const { data } = await axios.get(`${API_URL}/canteen/menu`, config);
+mobile/src/screens/student/CanteenScreen.js:            const { data } = await axios.get(`${API_URL}/canteen/orders`, config);
+mobile/src/screens/student/CanteenScreen.js:            await axios.post(`${API_URL}/canteen/order`, { items, pickupTime: 'Next Break' }, config);
+mobile/src/screens/student/StudyMaterialsScreen.js:            const response = await axios.get(`${API_URL}/materials`, config);
+mobile/src/screens/student/ClubListScreen.js:            const { data } = await axios.get(`${API_URL}/clubs`, config);
+mobile/src/screens/student/ClubListScreen.js:            await axios.post(`${API_URL}/clubs/${clubId}/join`, {}, config);
+mobile/src/screens/student/ClubListScreen.js:            await axios.post(`${API_URL}/clubs/${clubId}/leave`, {}, config);
+mobile/src/screens/student/LostFoundScreen.js:            const { data } = await axios.get(`${API_URL}/lost-found`, config);
+mobile/src/screens/student/LostFoundScreen.js:            await axios.post(`${API_URL}/lost-found`, newItem, config);
+mobile/src/screens/student/QuizAttemptScreen.js:            const { data } = await axios.get(`${API_URL}/quizzes/${quizId}`, config);
+mobile/src/screens/student/QuizAttemptScreen.js:            const { data } = await axios.post(
+mobile/src/screens/student/ViewMarksScreen.js:            const { data } = await axios.get(`${API_URL}/marks`, config);
+mobile/src/screens/student/ViewMarksScreen.js:            const { data: report } = await axios.get(`${API_URL}/reports/card`, config);
+mobile/src/screens/student/LibraryScreen.js:            const { data } = await axios.get(`${API_URL}/library${query}`, config);
+mobile/src/screens/student/ViewAttendanceScreen.js:            const { data } = await axios.get(`${API_URL}/attendance/student/${userInfo._id}`, config);
+mobile/src/screens/student/FeeStatusScreen.js:            const { data } = await axios.get(`${API_URL}/fees/me`, config);
+mobile/src/screens/student/FeeStatusScreen.js:            const { data: invoice } = await axios.get(`${API_URL}/fees/invoice`, config);
+mobile/src/screens/student/FeeStatusScreen.js:            const { data } = await axios.post(`${API_URL}/fees/upi/initiate`, { amount: feeData.feeAmount }, config);
+mobile/src/screens/NoticeBoardScreen.js:            const { data } = await axios.get(`${API_URL}/notices`, config);
+mobile/src/screens/NoticeBoardScreen.js:            await axios.post(`${API_URL}/notices`, { title, message, targetAudience }, config);
+mobile/src/screens/NoticeBoardScreen.js:                        await axios.delete(`${API_URL}/notices/${id}`, config);
+mobile/src/screens/admin/AlumniDirectoryScreen.js:            const { data } = await axios.get(`${API_URL}/alumni`, config);
+mobile/src/screens/admin/AlumniDirectoryScreen.js:            await axios.post(`${API_URL}/alumni`, newAlumni, config);
+mobile/src/screens/admin/StudentsListScreen.js:            const { data } = await axios.get(BASE_URL, config);
+mobile/src/screens/admin/AdminComplaintScreen.js:            const { data } = await axios.get(`${API_URL}/complaints`, config);
+mobile/src/screens/admin/AdminComplaintScreen.js:            await axios.put(`${API_URL}/complaints/${id}`, {}, config);
+mobile/src/screens/admin/AdminNoticeBoardScreen.js:            await axios.post(`${API_URL}/notices`, {
+mobile/src/screens/admin/TeacherDetailScreen.js:            const { data } = await axios.get(`${API_URL}/stats/teacher/${teacher._id}`, config);
+mobile/src/screens/admin/AdminLeaveScreen.js:            const { data } = await axios.get(`${API_URL}/leaves`, config);
+mobile/src/screens/admin/AdminLeaveScreen.js:            await axios.put(`${API_URL}/leaves/${id}`, { status }, config);
+mobile/src/screens/admin/AddTeacherScreen.js:            await axios.post(`${API_URL}/users/teacher`, {
+mobile/src/screens/admin/AdminDashboard.js:            const { data } = await axios.get(`${API_URL}/users/stats`, config);
+mobile/src/screens/admin/AdminAuditLogScreen.js:            const { data } = await axios.get(`${API_URL}/audit`, config);
+mobile/src/screens/admin/SchoolAnalyticsScreen.js:            const { data } = await axios.get(`${API_URL}/stats/analytics`, config);
+mobile/src/screens/admin/TeachersListScreen.js:            const { data } = await axios.get(BASE_URL, config);
+mobile/src/screens/admin/StaffStatusScreen.js:            const { data } = await axios.get(`${API_URL}/users?role=Teacher`, config);
+mobile/src/screens/admin/VisitorLogScreen.js:            const { data } = await axios.get(`${API_URL}/visitors`, config);
+mobile/src/screens/admin/VisitorLogScreen.js:            await axios.post(`${API_URL}/visitors`, newVisitor, config);
+mobile/src/screens/admin/VisitorLogScreen.js:            await axios.put(`${API_URL}/visitors/${id}/exit`, {}, config);
+mobile/src/screens/admin/InventoryListScreen.js:            const { data } = await axios.get(`${API_URL}/inventory`, config);
+mobile/src/screens/admin/InventoryListScreen.js:            await axios.post(`${API_URL}/inventory`, newItem, config);
+mobile/src/screens/admin/FeeManagementScreen.js:            const { data } = await axios.get(`${API_URL}/fees/students`, config);
+mobile/src/screens/admin/FeeManagementScreen.js:            await axios.put(`${API_URL}/fees/${selectedStudent._id}`, {
+mobile/src/screens/admin/StudentDetailScreen.js:                axios.get(`${API_URL}/attendance/student/${student._id}`, config),
+mobile/src/screens/admin/StudentDetailScreen.js:                axios.get(`${API_URL}/marks?studentId=${student._id}`, config),
+mobile/src/screens/admin/StudentDetailScreen.js:                axios.get(`${API_URL}/awards/student/${student._id}`, config).catch(() => ({ data: [] })),
+mobile/src/screens/admin/StudentDetailScreen.js:                axios.get(`${API_URL}/behavior/student/${student._id}`, config).catch(() => ({ data: { history: [] } }))
+mobile/src/screens/quiz/CreateQuizScreen.js:            const { data } = await axios.get(`${API_URL}/materials`, config);
+mobile/src/screens/quiz/CreateQuizScreen.js:            await axios.post(`${API_URL}/quizzes`, quizData, config);
+mobile/src/screens/assignment/AssignmentsListScreen.js:            const { data } = await axios.get(`${API_URL}/assignments`, config);
+mobile/src/screens/assignment/AssignmentsListScreen.js:                        await axios.delete(`${API_URL}/assignments/${id}`, config);
+mobile/src/screens/assignment/CreateAssignmentScreen.js:            const { data } = await axios.get(`${API_URL}/classes/teacher`, config);
+mobile/src/screens/assignment/CreateAssignmentScreen.js:            const { data } = await axios.get(`${API_URL}/quizzes/teacher`, config);
+mobile/src/screens/assignment/CreateAssignmentScreen.js:                await axios.put(`${API_URL}/assignments/${currentAssignment._id}`, assignmentData, config);
+mobile/src/screens/assignment/CreateAssignmentScreen.js:                await axios.post(`${API_URL}/assignments`, assignmentData, config);
+mobile/src/screens/assignment/AssignmentDetailScreen.js:            const { data } = await axios.get(`${API_URL}/submissions/my/${assignment._id}`, config);
+mobile/src/screens/assignment/AssignmentDetailScreen.js:            const { data } = await axios.post(`${API_URL}/submissions`, payload, config);
+mobile/src/screens/assignment/GradingScreen.js:            await axios.put(`${API_URL}/submissions/${submission._id}/grade`, {
+mobile/src/screens/assignment/AssignmentSubmissionsListScreen.js:            const { data } = await axios.get(`${API_URL}/submissions/assignment/${assignment._id}`, config);
+mobile/src/screens/ComplaintBoxScreen.js:            await axios.post(`${API_URL}/complaints`, {
+mobile/src/screens/remark/RemarkInputScreen.js:            await axios.post(`${API_URL}/remarks`, {
+mobile/src/screens/remark/StudentRemarksScreen.js:            const { data } = await axios.get(`${API_URL}/remarks/my`, config);
+mobile/src/screens/EventCalendarScreen.js:            const { data } = await axios.get(`${API_URL}/events`, config);
+mobile/src/screens/EventCalendarScreen.js:            await axios.post(`${API_URL}/events`, { title, description, date }, config);
+mobile/src/screens/EventCalendarScreen.js:                        await axios.delete(`${API_URL}/events/${id}`, config);
+mobile/src/screens/LoginScreen.js:                            await axios.post(`${API_URL}/auth/forgot-password`, { email });
+mobile/src/screens/ai/AIChatScreen.js:            const { data } = await axios.post(
+mobile/src/screens/ai/PerformanceAnalysisScreen.js:            const { data } = await axios.get(url, config);
+mobile/src/screens/teacher/TakeAttendanceScreen.js:            const { data } = await axios.get(`${API_URL}/classes/teacher`, config);
+mobile/src/screens/teacher/TakeAttendanceScreen.js:            await axios.post(`${API_URL}/attendance`, {
+mobile/src/screens/teacher/BehaviorTrackerScreen.js:            const classRes = await axios.get(`${API_URL}/classes/teacher`, config);
+mobile/src/screens/teacher/BehaviorTrackerScreen.js:            await axios.post(`${API_URL}/behavior`, {
+mobile/src/screens/teacher/StudentAwardsScreen.js:            await axios.post(`${API_URL}/awards`, payload, config);
+mobile/src/screens/teacher/UploadMarksScreen.js:            const { data } = await axios.get(`${API_URL}/classes/teacher`, config);
+mobile/src/screens/teacher/UploadMarksScreen.js:            await axios.post(`${API_URL}/marks`, {
+mobile/src/screens/teacher/TeacherLeaveScreen.js:            const { data } = await axios.get(`${API_URL}/leaves`, config);
+mobile/src/screens/teacher/TeacherLeaveScreen.js:            await axios.post(`${API_URL}/leaves`, {
+mobile/src/screens/teacher/LessonPlannerScreen.js:            const { data } = await axios.get(`${API_URL}/planner`, config);
+mobile/src/screens/teacher/LessonPlannerScreen.js:            await axios.post(`${API_URL}/planner`, newPlan, config);
+mobile/src/screens/teacher/LessonPlannerScreen.js:            const { data } = await axios.post(`${API_URL}/ai/lesson-plan`, {
+mobile/src/screens/teacher/TeacherDashboard.js:                axios.get(`${API_URL}/classes/teacher`, config).catch(() => ({ data: [] })),
+mobile/src/screens/teacher/TeacherDashboard.js:                axios.get(`${API_URL}/assignments`, config).catch(() => ({ data: [] }))
+mobile/src/screens/teacher/PTMSchedulerScreen.js:            const { data } = await axios.get(`${API_URL}/ptm`, config);
+mobile/src/screens/teacher/PTMSchedulerScreen.js:            await axios.post(`${API_URL}/ptm`, newSlot, config);
+mobile/src/screens/teacher/AddStudentScreen.js:            await axios.post(`${API_URL}/users/student`, {
+mobile/src/screens/teacher/ScheduleScreen.js:            const { data } = await axios.get(`${API_URL}/classes/teacher`, config);
+mobile/src/screens/teacher/SyllabusTrackerScreen.js:            const { data } = await axios.get(`${API_URL}/courses`, config);
+mobile/src/screens/teacher/RequisitionScreen.js:                axios.get(`${API_URL}/requisition`, config),
+mobile/src/screens/teacher/RequisitionScreen.js:                axios.get(`${API_URL}/inventory`, config)
+mobile/src/screens/teacher/RequisitionScreen.js:            await axios.post(`${API_URL}/requisition`, newRequest, config);
