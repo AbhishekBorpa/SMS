@@ -1,50 +1,65 @@
-# Welcome to your Expo app 👋
+# SMS Backend
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is the backend for the School Management System (SMS), built with Node.js, Express, and MongoDB.
 
-## Get started
+## Features
 
-1. Install dependencies
+-   **Authentication**: JWT-based authentication for Admins, Teachers, and Students.
+-   **Role-Based Access Control (RBAC)**: Secure endpoints based on user roles.
+-   **Modules**:
+    -   Attendance Management
+    -   Quiz & Assessment System
+    -   Messaging & Notifications
+    -   User Management (Students, Teachers, Admins)
+-   **API**: RESTful API for mobile and web clients.
 
-   ```bash
-   npm install
-   ```
+## Prerequisites
 
-2. Start the app
+-   Node.js (LTS version recommended)
+-   MongoDB (Local running instance or MongoDB Atlas Connection String)
+-   npm or yarn
 
-   ```bash
-   npx expo start
-   ```
+## Installation
 
-In the output, you'll find options to open the app in a
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/AbhishekBorpa/SMS.git
+    cd SMS
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Configure Environment Variables:
+    -   Create a `.env` file in the root directory.
+    -   Add the following variables:
+        ```env
+        PORT=5002
+        MONGODB_URI=your_mongodb_connection_string
+        JWT_SECRET=your_jwt_secret_key
+        ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Running the Server
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### Development Mode
+Runs the server with `nodemon` for auto-reloading.
 
 ```bash
-npm run reset-project
+npm run dev
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Production Mode
 
-## Learn more
+```bash
+npm start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## API Documentation
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+-   **Base URL**: `http://localhost:5002/api`
+-   **Endpoints**: See `backend_routes.txt` for a list of available routes.
 
-## Join the community
+## Related Repositories
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+-   **Mobile App**: [SMS-MOBILE](https://github.com/AbhishekBorpa/SMS-MOBILE)
+-   **Web App**: [SMS-WEB](https://github.com/AbhishekBorpa/SMS-WEB)
