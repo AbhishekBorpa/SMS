@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { protect, admin, teacher } = require('../middleware/authMiddleware');
+const { protect, admin } = require('../middleware/authMiddleware');
+const adminOrTeacher = require('../middleware/adminOrTeacherMiddleware');
 const {
     createExam,
     getClassExams,
@@ -9,13 +10,13 @@ const {
 } = require('../controllers/examController');
 
 router.route('/')
-    .post(protect, teacher, createExam)
+    .post(protect, adminOrTeacher, createExam)
     .get(protect, admin, getAllExams);
 
 router.route('/class/:classId')
     .get(protect, getClassExams);
 
 router.route('/:id/publish')
-    .put(protect, teacher, publishExam);
+    .put(protect, adminOrTeacher, publishExam);
 
 module.exports = router;

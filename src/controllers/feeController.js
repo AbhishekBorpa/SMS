@@ -248,17 +248,7 @@ const handleUpiWebhook = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = {
-    getStudentsFeeStatus,
-    updateFeeDetails,
-    getTransactionHistory,
-    getMyFeeStatus,
-    getFeeInvoice,
-    createUpiPayment,
-    handleUpiWebhook,
-    bulkAssignFees,
-    getAllTransactions
-};
+
 
 // @desc    Bulk assign fees to a class
 // @route   POST /api/fees/bulk-assign
@@ -338,5 +328,16 @@ const getAllTransactions = asyncHandler(async (req, res) => {
         .sort({ date: -1 })
         .limit(100);
 
-    res.json(schoolTransactions);
 });
+
+module.exports = {
+    getStudentsFeeStatus,
+    updateFeeDetails,
+    getTransactionHistory,
+    getMyFeeStatus,
+    getFeeInvoice,
+    createUpiPayment,
+    handleUpiWebhook,
+    bulkAssignFees,
+    getAllTransactions
+};
