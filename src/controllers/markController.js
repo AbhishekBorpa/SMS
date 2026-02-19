@@ -6,20 +6,28 @@ const Class = require('../models/Class');
 // @route   POST /api/marks
 // @access  Private (Teacher)
 const uploadMark = asyncHandler(async (req, res) => {
-    const { classId, studentId, examType, score, total } = req.body;
+    const { classId, studentId, examType, score, total, examId } = req.body;
 
-    // Check if mark exists for this specific exam/class/student
-    let mark = await Mark.findOne({
+    let query = {
         class: classId,
         student: studentId,
-        examType,
         school: req.schoolId
-    });
+    };
+
+    if (examId) {
+        query.exam = examId;
+    } else {
+        query.examType = examType;
+    }
+
+    // Check if mark exists
+    let mark = await Mark.findOne(query);
 
     if (mark) {
         // Update
         mark.score = score;
         mark.total = total;
+        if (examId) mark.exam = examId;
         await mark.save();
         res.json({ message: 'Mark updated', mark });
     } else {
@@ -27,7 +35,8 @@ const uploadMark = asyncHandler(async (req, res) => {
         mark = await Mark.create({
             class: classId,
             student: studentId,
-            examType,
+            examType: examId ? 'Exam' : examType,
+            exam: examId,
             score,
             total,
             school: req.schoolId
@@ -53,7 +62,8 @@ const getMarks = asyncHandler(async (req, res) => {
 
     const marks = await Mark.find(query)
         .populate('student', 'name')
-        .populate('class', 'name subject');
+        .populate('class', 'name subject')
+        .populate('exam', 'title date');
 
     res.json(marks);
 });

@@ -49,6 +49,9 @@ const registerUser = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             role: user.role,
+            mobileNumber: user.mobileNumber,
+            address: user.address,
+            feeStatus: user.feeStatus,
             token: generateToken(user._id),
         });
     } else {
@@ -78,6 +81,9 @@ const loginUser = asyncHandler(async (req, res) => {
             name: user.name,
             email: user.email,
             role: user.role,
+            mobileNumber: user.mobileNumber,
+            address: user.address,
+            feeStatus: user.feeStatus,
             token: generateToken(user._id),
         });
     } else {
@@ -90,13 +96,23 @@ const loginUser = asyncHandler(async (req, res) => {
 // @route   GET /api/auth/me
 // @access  Private
 const getMe = asyncHandler(async (req, res) => {
-    const user = {
-        id: req.user._id,
-        email: req.user.email,
-        name: req.user.name,
-        role: req.user.role,
-    };
-    res.status(200).json(user);
+    const user = await User.findById(req.user._id);
+    if (user) {
+        res.json({
+            _id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            mobileNumber: user.mobileNumber,
+            address: user.address,
+            feeStatus: user.feeStatus,
+            feeAmount: user.feeAmount,
+            feeDueDate: user.feeDueDate
+        });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
 
 // @desc    Change user password

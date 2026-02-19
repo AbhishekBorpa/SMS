@@ -45,6 +45,7 @@ app.use('/api/classes', require('./src/routes/classRoutes'));
 app.use('/api/messages', require('./src/routes/messageRoutes'));
 app.use('/api/attendance', require('./src/routes/attendanceRoutes'));
 app.use('/api/marks', require('./src/routes/markRoutes'));
+app.use('/api/exams', require('./src/routes/examRoutes'));
 app.use('/api/ai', require('./src/routes/aiRoutes'));
 app.use('/api/notices', require('./src/routes/noticeRoutes'));
 app.use('/api/leaves', require('./src/routes/leaveRoutes'));

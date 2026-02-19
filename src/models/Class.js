@@ -27,7 +27,11 @@ const classSchema = mongoose.Schema({
         day: { type: String, required: true }, // e.g., "Monday"
         startTime: { type: String, required: true }, // e.g., "10:00 AM"
         endTime: { type: String, required: true } // e.g., "11:00 AM"
-    }]
+    }],
+    meetingLink: {
+        type: String,
+        default: ''
+    }
 }, {
     timestamps: true
 });

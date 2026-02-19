@@ -139,14 +139,26 @@ const createStudent = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get users by role
-// @route   GET /api/users?role=Teacher
+// @route   GET /api/users?role=Teacher&classId=...
 // @access  Private (Admin/Teacher)
 const getUsers = asyncHandler(async (req, res) => {
-    const role = req.query.role;
+    const { role, classId } = req.query;
     let query = { school: req.schoolId };
+
     if (role) {
         query.role = role;
     }
+
+    if (classId && role === 'Student') {
+        const classDoc = await Class.findById(classId);
+        if (classDoc) {
+            query._id = { $in: classDoc.students };
+        } else {
+            // If class not found, return empty list
+            return res.json([]);
+        }
+    }
+
     const users = await User.find(query).select('-password');
     res.json(users);
 });

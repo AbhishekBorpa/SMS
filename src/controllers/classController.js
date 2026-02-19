@@ -6,7 +6,7 @@ const User = require('../models/User');
 // @route   POST /api/classes
 // @access  Private/Admin
 const createClass = asyncHandler(async (req, res) => {
-    const { name, subject, teacherId, schedule } = req.body;
+    const { name, subject, teacherId, schedule, meetingLink } = req.body;
 
     const teacher = await User.findOne({ _id: teacherId, school: req.schoolId });
     if (!teacher || teacher.role !== 'Teacher') {
@@ -19,7 +19,8 @@ const createClass = asyncHandler(async (req, res) => {
         subject,
         teacher: teacherId,
         school: req.schoolId,
-        schedule
+        schedule,
+        meetingLink
     });
 
     res.status(201).json(newClass);
@@ -107,6 +108,7 @@ const updateClass = asyncHandler(async (req, res) => {
         classObj.subject = req.body.subject || classObj.subject;
         classObj.teacher = req.body.teacherId || classObj.teacher;
         classObj.schedule = req.body.schedule || classObj.schedule;
+        classObj.meetingLink = req.body.meetingLink || classObj.meetingLink;
 
         const updatedClass = await classObj.save();
         res.json(updatedClass);

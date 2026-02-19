@@ -6,7 +6,7 @@ const User = require('../models/User');
 // @route   POST /api/schools
 // @access  Public (or Super Admin)
 const registerSchool = asyncHandler(async (req, res) => {
-    const { name, slug, contactEmail, adminName, adminEmail, adminPassword } = req.body;
+    const { name, slug, contactEmail, adminName, adminEmail, adminPassword, address, phone, schoolType, website } = req.body;
 
     const schoolExists = await School.findOne({ slug });
 
@@ -18,7 +18,11 @@ const registerSchool = asyncHandler(async (req, res) => {
     const school = await School.create({
         name,
         slug,
-        contactEmail
+        contactEmail,
+        address,
+        phone,
+        schoolType,
+        website
     });
 
     if (school) {
@@ -72,8 +76,67 @@ const getSchoolBySlug = asyncHandler(async (req, res) => {
     }
 });
 
+
+
+// @desc    Get subscription status
+// @route   GET /api/schools/subscription
+// @access  Private (Admin)
+const getSubscriptionStatus = asyncHandler(async (req, res) => {
+    const school = await School.findById(req.schoolId).select('subscriptionStatus subscriptionPlan subscriptionExpiry');
+    if (!school) {
+        res.status(404);
+        throw new Error('School not found');
+    }
+
+    // Check if expired
+    const isExpired = new Date() > new Date(school.subscriptionExpiry);
+    const status = isExpired ? 'Expired' : school.subscriptionStatus;
+
+    res.json({
+        status,
+        plan: school.subscriptionPlan,
+        expiry: school.subscriptionExpiry,
+        isExpired,
+        daysLeft: Math.ceil((new Date(school.subscriptionExpiry) - new Date()) / (1000 * 60 * 60 * 24))
+    });
+});
+
+// @desc    Upgrade subscription (Simulated)
+// @route   POST /api/schools/subscription/upgrade
+// @access  Private (Admin)
+const upgradeSubscription = asyncHandler(async (req, res) => {
+    const { plan, durationMonths } = req.body; // e.g., 'Premium', 12
+
+    const school = await School.findById(req.schoolId);
+    if (!school) {
+        res.status(404);
+        throw new Error('School not found');
+    }
+
+    // Simulate Payment Validation here...
+
+    // Update Plan
+    school.subscriptionPlan = plan || 'Premium';
+    school.subscriptionStatus = 'Active';
+
+    // Extend Expiry
+    const currentExpiry = new Date(school.subscriptionExpiry) > new Date() ? new Date(school.subscriptionExpiry) : new Date();
+    const monthsToAdd = durationMonths || 12;
+    currentExpiry.setMonth(currentExpiry.getMonth() + monthsToAdd);
+
+    school.subscriptionExpiry = currentExpiry;
+    await school.save();
+
+    res.json({
+        message: `Subscription upgraded to ${school.subscriptionPlan}`,
+        newExpiry: school.subscriptionExpiry
+    });
+});
+
 module.exports = {
     registerSchool,
     getSchools,
-    getSchoolBySlug
+    getSchoolBySlug,
+    getSubscriptionStatus,
+    upgradeSubscription
 };

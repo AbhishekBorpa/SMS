@@ -111,10 +111,23 @@ const returnBook = asyncHandler(async (req, res) => {
 });
 
 // @desc    Get all loans
-// @route   GET /api/library/loans
+// @route   GET /api/library/loans?classId=...
 // @access  Private/Admin
 const getLoans = asyncHandler(async (req, res) => {
-    const loans = await BookLoan.find({ school: req.schoolId })
+    const { classId } = req.query;
+    let query = { school: req.schoolId };
+
+    if (classId) {
+        // Find all students in this class
+        const classDoc = await require('../models/Class').findById(classId); // Lazy load to avoid circular dependency if any
+        if (classDoc && classDoc.students) {
+            query.student = { $in: classDoc.students };
+        } else {
+            return res.json([]);
+        }
+    }
+
+    const loans = await BookLoan.find(query)
         .populate('book', 'title author')
         .populate('student', 'name email')
         .sort({ createdAt: -1 });

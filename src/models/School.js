@@ -22,10 +22,33 @@ const schoolSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    schoolType: {
+        type: String,
+        enum: ['K-12', 'Primary', 'Secondary', 'University', 'Institute'],
+        default: 'K-12'
+    },
+    phone: {
+        type: String
+    },
+    website: {
+        type: String
+    },
     subscriptionStatus: {
         type: String,
         enum: ['Active', 'Suspended', 'Trial'],
         default: 'Trial'
+    },
+    subscriptionPlan: {
+        type: String,
+        enum: ['Free', 'Basic', 'Premium'],
+        default: 'Free'
+    },
+    subscriptionExpiry: {
+        type: Date,
+        default: () => new Date(+new Date() + 14 * 24 * 60 * 60 * 1000) // 14 days from now
+    },
+    customerBillingId: {
+        type: String
     },
     adminUser: {
         type: mongoose.Schema.Types.ObjectId,

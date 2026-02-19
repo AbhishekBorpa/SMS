@@ -11,38 +11,122 @@ const Mark = require('../models/Mark');
 // @desc    Get detailed school analytics for charts
 // @route   GET /api/stats/analytics
 // @access  Private (Admin)
+// @desc    Get detailed school analytics for charts
+// @route   GET /api/stats/analytics
+// @access  Private (Admin)
 const getSchoolAnalytics = asyncHandler(async (req, res) => {
-    console.log('getSchoolAnalytics Controller Executing...');
     try {
         const school = req.schoolId;
-        console.log('School ID:', school);
+        const { classId } = req.query;
+        const matchStage = { school };
 
-        // 1. Revenue Trends (Last 6 Months) - Simplified Mock for Stability
+        if (classId) {
+            matchStage.class = new mongoose.Types.ObjectId(classId);
+        }
+
+        // 1. Revenue Trends (Last 6 Months)
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+        const revenueAggregation = await FeeTransaction.aggregate([
+            { $match: { school, status: 'Completed', createdAt: { $gte: sixMonthsAgo } } },
+            {
+                $group: {
+                    _id: { $month: "$createdAt" },
+                    total: { $sum: "$amount" }
+                }
+            },
+            { $sort: { "_id": 1 } }
+        ]);
+
         const revenueTrend = {
-            labels: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
-            data: [15000, 18000, 12000, 25000, 22000, 30000]
+            labels: revenueAggregation.map(r => new Date(0, r._id - 1).toLocaleString('default', { month: 'short' })),
+            data: revenueAggregation.map(r => r.total)
         };
 
-        // 2. Attendance Radar (By Class) - Simplified Mock
+        // 2. Attendance Stats
+        let attendancematch = { school, date: { $gte: sixMonthsAgo } };
+        if (classId) {
+            attendancematch.class = new mongoose.Types.ObjectId(classId);
+        }
+
+        const attendanceData = await Attendance.aggregate([
+            { $match: attendancematch },
+            { $unwind: "$records" },
+            {
+                $group: {
+                    _id: classId ? { $dateToString: { format: "%Y-%m-%d", date: "$date" } } : "$class",
+                    present: {
+                        $sum: { $cond: [{ $eq: ["$records.status", "Present"] }, 1, 0] }
+                    },
+                    total: { $sum: 1 }
+                }
+            },
+            { $sort: { "_id": 1 } } // Sort by date or class ID
+        ]);
+
+        // If filtering by class, lookup class name isn't needed for label (use date). 
+        // If global, we need class names.
+        let attendanceLabels = [];
+        let attendanceValues = [];
+
+        if (classId) {
+            attendanceLabels = attendanceData.map(a => a._id); // Date strings
+        } else {
+            // Populate class names manually since $lookup inside group is complex or requires another stage
+            const classIds = attendanceData.map(a => a._id);
+            const classes = await Class.find({ _id: { $in: classIds } }).select('name');
+            const classMap = classes.reduce((acc, c) => ({ ...acc, [c._id]: c.name }), {});
+            attendanceLabels = attendanceData.map(a => classMap[a._id] || 'Unknown');
+        }
+
+        attendanceValues = attendanceData.map(a => Math.round((a.present / a.total) * 100));
+
         const attendanceStats = {
-            labels: ['Class X-A', 'Class IX-B', 'Class XII-Sci', 'Class VIII-A', 'Class VII-C'],
-            data: [85, 92, 78, 88, 95]
+            labels: attendanceLabels,
+            data: attendanceValues
         };
 
-        // 3. Academic Performance (Avg Scores) - Simplified Mock
+        // 3. Academic Performance
+        // Global: Avg score per Subject
+        // Filtered: Avg score per Exam Type
+
+        let academicMatch = { school };
+        if (classId) academicMatch.class = new mongoose.Types.ObjectId(classId);
+
+        const academicData = await Mark.aggregate([
+            { $match: academicMatch },
+            {
+                $lookup: {
+                    from: "classes",
+                    localField: "class",
+                    foreignField: "_id",
+                    as: "classInfo"
+                }
+            },
+            { $unwind: "$classInfo" },
+            {
+                $group: {
+                    _id: classId ? "$examType" : "$classInfo.subject",
+                    avgScore: {
+                        $avg: { $multiply: [{ $divide: ["$score", "$total"] }, 100] }
+                    }
+                }
+            }
+        ]);
+
         const academicStats = {
-            labels: ['Math', 'Physics', 'Chem', 'Eng', 'Bio'],
-            data: [72, 85, 68, 90, 78]
+            labels: academicData.map(a => a._id),
+            data: academicData.map(a => Math.round(a.avgScore))
         };
 
-        // 4. Enrollment Growth (Students registered per month) - Simplified Mock
+        // 4. Enrollment Growth (Mock for now as User creation date might vary)
         const growthTrend = {
             labels: ['Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
             data: [5, 8, 12, 4, 15, 20]
         };
 
         // 5. Faculty Leaderboard
-        console.log('Aggregating Faculty Leaderboard...');
         const activeTeachers = await Quiz.aggregate([
             { $match: { school } },
             { $group: { _id: "$teacher", count: { $sum: 1 } } },
@@ -52,17 +136,14 @@ const getSchoolAnalytics = asyncHandler(async (req, res) => {
             { $unwind: '$teacherInfo' },
             { $project: { name: '$teacherInfo.name', count: 1 } }
         ]);
-        console.log('Faculty Aggregation Complete. Count:', activeTeachers.length);
 
-        const responseData = {
+        res.json({
             revenueTrend,
             attendanceStats,
             academicStats,
             growthTrend,
             facultyLeaderboard: activeTeachers
-        };
-
-        res.json(responseData);
+        });
 
     } catch (error) {
         console.error('Error in getSchoolAnalytics:', error);

@@ -16,9 +16,13 @@ const markSchema = mongoose.Schema({
         ref: 'Class',
         required: true
     },
+    exam: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Exam'
+    },
     examType: {
         type: String,
-        required: true // e.g., "Midterm", "Final"
+        required: false // Optional if linked to an Exam
     },
     score: {
         type: Number,

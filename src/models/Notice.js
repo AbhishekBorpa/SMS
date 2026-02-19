@@ -22,6 +22,11 @@ const noticeSchema = mongoose.Schema({
     targetAudience: {
         type: String, // 'All', 'Student', 'Teacher'
         default: 'All'
+    },
+    targetClass: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Class',
+        default: null
     }
 }, {
     timestamps: true,

@@ -98,9 +98,33 @@ const seedMenu = asyncHandler(async (req, res) => {
     res.json({ message: 'Menu seeded' });
 });
 
+// @desc    Get all orders (Admin)
+// @route   GET /api/canteen/orders/all?classId=...
+// @access  Private/Admin
+const getAllOrders = asyncHandler(async (req, res) => {
+    const { classId } = req.query;
+    let query = { school: req.schoolId };
+
+    if (classId) {
+        const classDoc = await require('../models/Class').findById(classId);
+        if (classDoc && classDoc.students) {
+            query.student = { $in: classDoc.students };
+        } else {
+            return res.json([]);
+        }
+    }
+
+    const orders = await CanteenOrder.find(query)
+        .populate('student', 'name email')
+        .populate('items.item', 'name price')
+        .sort({ createdAt: -1 });
+    res.json(orders);
+});
+
 module.exports = {
     getMenu,
     placeOrder,
     getMyOrders,
-    seedMenu
+    seedMenu,
+    getAllOrders
 };

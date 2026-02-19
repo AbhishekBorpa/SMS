@@ -49,38 +49,48 @@ const getConversation = asyncHandler(async (req, res) => {
 // @access  Private
 const getChatTargets = asyncHandler(async (req, res) => {
     const currentUser = req.user;
-    let query = { school: req.schoolId };
+    let targets = [];
 
-    // Logic for who sees whom:
-    // Admin: Sees Everyone within their school
-    // Teacher: Sees Admins and Students within their school
-    // Student: Sees Admins and Teachers within their school
-
-    // All roles should be scoped to their school, except potentially SuperAdmin
-    // For Admin role, ensure the school filter is maintained.
     if (currentUser.role === 'Admin') {
-        query = { ...query, _id: { $ne: currentUser._id } }; // All users except self, within their school
+        // Admin sees everyone in the school
+        targets = await User.find({
+            school: req.schoolId,
+            _id: { $ne: currentUser._id }
+        }).select('name email role avatar');
+
     } else if (currentUser.role === 'Teacher') {
-        query = {
-            ...query,
-            _id: { $ne: currentUser._id },
-            role: { $in: ['Admin', 'Student'] }
-        };
+        // Teacher: Sees Admins + Students in their classes
+        const admins = await User.find({ school: req.schoolId, role: 'Admin' }).select('name email role avatar');
+
+        // Find classes taught by this teacher
+        const classes = await require('../models/Class').find({ teacher: currentUser._id });
+        const studentIds = classes.reduce((acc, curr) => [...acc, ...curr.students], []);
+
+        const students = await User.find({ _id: { $in: studentIds } }).select('name email role avatar');
+
+        targets = [...admins, ...students];
+
     } else if (currentUser.role === 'Student') {
-        query = {
-            ...query,
-            _id: { $ne: currentUser._id },
-            role: { $in: ['Admin', 'Teacher'] }
-        };
-    } else if (currentUser.role === 'SuperAdmin') {
-        // SuperAdmin can see all users across all schools.
-        // This case would bypass the school filter.
-        // If SuperAdmin should also be scoped, remove this else if block.
-        query = { _id: { $ne: currentUser._id } };
+        // Student: Sees Admins + Their Class Teacher
+        const admins = await User.find({ school: req.schoolId, role: 'Admin' }).select('name email role avatar');
+
+        // Find student's class
+        const studentClass = await require('../models/Class').findOne({ students: currentUser._id });
+        let teachers = [];
+
+        if (studentClass && studentClass.teacher) {
+            const classTeacher = await User.findById(studentClass.teacher).select('name email role avatar');
+            if (classTeacher) teachers.push(classTeacher);
+        }
+
+        targets = [...admins, ...teachers];
     }
 
-    const targets = await User.find(query).select('name email role');
-    res.json(targets);
+    // Remove duplicates just in case
+    const uniqueTargets = Array.from(new Set(targets.map(a => a._id.toString())))
+        .map(id => targets.find(a => a._id.toString() === id));
+
+    res.json(uniqueTargets);
 });
 
 module.exports = {

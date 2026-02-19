@@ -255,5 +255,88 @@ module.exports = {
     getMyFeeStatus,
     getFeeInvoice,
     createUpiPayment,
-    handleUpiWebhook // Add handleUpiWebhook
+    handleUpiWebhook,
+    bulkAssignFees,
+    getAllTransactions
 };
+
+// @desc    Bulk assign fees to a class
+// @route   POST /api/fees/bulk-assign
+// @access  Private (Admin)
+const bulkAssignFees = asyncHandler(async (req, res) => {
+    const { classId, amount, dueDate, description } = req.body;
+
+    if (!classId || !amount) {
+        res.status(400);
+        throw new Error('Class ID and Amount are required');
+    }
+
+    const classDoc = await Class.findById(classId);
+    if (!classDoc) {
+        res.status(404);
+        throw new Error('Class not found');
+    }
+
+    // Find all students in this class
+    const students = await User.find({
+        _id: { $in: classDoc.students },
+        school: req.schoolId
+    });
+
+    let updatedCount = 0;
+
+    for (const student of students) {
+        // Calculate new amount: existing + new fee
+        const existingAmount = student.feeAmount || 0;
+        const newAmount = existingAmount + Number(amount);
+
+        student.feeAmount = newAmount;
+        if (dueDate) student.feeDueDate = dueDate;
+        if (student.feeStatus === 'Paid') student.feeStatus = 'Pending'; // Reset to pending if new fee added
+
+        await student.save();
+
+        // Log transaction (Debit - Fee Levied)
+        await FeeTransaction.create({
+            student: student._id,
+            amount: Number(amount),
+            type: 'Debit',
+            remarks: description || `Bulk Fee Assigned: ${classDoc.name}`,
+            recordedBy: req.user._id,
+            date: new Date()
+        });
+
+        updatedCount++;
+    }
+
+    res.json({ message: `Fees assigned to ${updatedCount} students in ${classDoc.name}` });
+});
+
+// @desc    Get all transactions (Admin)
+// @route   GET /api/fees/transactions
+// @access  Private (Admin)
+const getAllTransactions = asyncHandler(async (req, res) => {
+    const transactions = await FeeTransaction.find({})
+        .populate('student', 'name email')
+        .populate('recordedBy', 'name')
+        .sort({ date: -1 })
+        .limit(100); // Limit to last 100 for performance
+
+    // Filter by school manually since FeeTransaction doesn't have schoolId directly
+    // Ideally FeeTransaction should have schoolId, but for now we filter via student population
+    // However, population happens after find. To be safe/fast, we should add school to FeeTransaction model.
+    // For now, let's filter in memory or rely on student's school if we populated it.
+    // BETTER FIX: Filter transactions where student belongs to req.schoolId
+
+    // Fetch all student IDs for this school
+    const schoolStudentIds = await User.find({ school: req.schoolId }).select('_id');
+    const ids = schoolStudentIds.map(s => s._id);
+
+    const schoolTransactions = await FeeTransaction.find({ student: { $in: ids } })
+        .populate('student', 'name email')
+        .populate('recordedBy', 'name')
+        .sort({ date: -1 })
+        .limit(100);
+
+    res.json(schoolTransactions);
+});
