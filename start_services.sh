@@ -14,7 +14,7 @@ echo "Starting SMS Services..."
 
 # Start Backend
 echo "Starting Backend (Port 5000)..."
-(cd backend && npm run dev) &
+npm run dev &
 
 # Start Website
 echo "Starting Website (Port 3000)..."
