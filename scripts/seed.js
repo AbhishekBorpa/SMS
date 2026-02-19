@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const connectDB = require('./src/config/db');
-const User = require('./src/models/User');
-const Class = require('./src/models/Class');
-const School = require('./src/models/School');
-const StudyMaterial = require('./src/models/StudyMaterial');
-const Mark = require('./src/models/Mark');
-const Attendance = require('./src/models/Attendance');
-const Assignment = require('./src/models/Assignment');
-const Notice = require('./src/models/Notice');
+const connectDB = require('../src/config/db');
+const User = require('../src/models/User');
+const Class = require('../src/models/Class');
+const School = require('../src/models/School');
+const StudyMaterial = require('../src/models/StudyMaterial');
+const Mark = require('../src/models/Mark');
+const Attendance = require('../src/models/Attendance');
+const Assignment = require('../src/models/Assignment');
+const Notice = require('../src/models/Notice');
 
 dotenv.config();
 

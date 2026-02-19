@@ -6,3 +6,5 @@ coverage/
 dist/
 mobile/
 website/
+keys/
+*.pem

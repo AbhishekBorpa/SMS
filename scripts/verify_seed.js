@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const connectDB = require('./src/config/db');
-const User = require('./src/models/User');
-const Class = require('./src/models/Class');
+const connectDB = require('../src/config/db');
+const User = require('../src/models/User');
+const Class = require('../src/models/Class');
 
 dotenv.config();
 
