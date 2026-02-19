@@ -12,6 +12,7 @@ import { AuthContext, AuthProvider } from './src/context/AuthContext';
 
 import MainTabNavigator from './src/navigation/MainTabNavigator';
 import AddTeacherScreen from './src/screens/admin/AddTeacherScreen';
+import AddTransportScreen from './src/screens/admin/AddTransportScreen';
 import AdminAuditLogScreen from './src/screens/admin/AdminAuditLogScreen';
 import AdminComplaintScreen from './src/screens/admin/AdminComplaintScreen';
 import AdminDashboard from './src/screens/admin/AdminDashboard';
@@ -29,6 +30,7 @@ import StudentDetailScreen from './src/screens/admin/StudentDetailScreen';
 import StudentsListScreen from './src/screens/admin/StudentsListScreen';
 import TeacherDetailScreen from './src/screens/admin/TeacherDetailScreen';
 import TeachersListScreen from './src/screens/admin/TeachersListScreen';
+import TransportListScreen from './src/screens/admin/TransportListScreen';
 import VisitorLogScreen from './src/screens/admin/VisitorLogScreen';
 import AIChatScreen from './src/screens/ai/AIChatScreen';
 import PerformanceAnalysisScreen from './src/screens/ai/PerformanceAnalysisScreen';
