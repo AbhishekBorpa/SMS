@@ -1,5 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const { createAndEmitMessage } = require('../services/messageService'); // Import the new service function
+const User = require('../models/User');
+const Message = require('../models/Message');
 
 // @desc    Send a message
 // @route   POST /api/messages
@@ -89,6 +91,9 @@ const getChatTargets = asyncHandler(async (req, res) => {
     // Remove duplicates just in case
     const uniqueTargets = Array.from(new Set(targets.map(a => a._id.toString())))
         .map(id => targets.find(a => a._id.toString() === id));
+
+    console.log(`[getChatTargets] User: ${currentUser.email}, Role: ${currentUser.role}, School: ${req.schoolId}`);
+    console.log(`[getChatTargets] Targets found: ${uniqueTargets.length}`);
 
     res.json(uniqueTargets);
 });
