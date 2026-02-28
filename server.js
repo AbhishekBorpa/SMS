@@ -80,6 +80,8 @@ app.use('/api/settings', require('./src/routes/settingRoutes'));
 app.use('/api/transport', require('./src/routes/transportRoutes'));
 app.use('/api/stats', require('./src/routes/statsRoutes'));
 app.use('/api/company', require('./src/routes/companyRoutes'));
+app.use('/api/courses', require('./src/routes/courseRoutes'));
+app.use('/api/enrollments', require('./src/routes/enrollmentRoutes'));
 
 app.get('/', (req, res) => {
     res.send('School Management System API is running');
@@ -189,7 +191,7 @@ process.on('SIGTERM', () => {
     server.close(() => {
         console.log('HTTP server closed');
         const mongoose = require('mongoose');
-        mongoose.connection.close(false, () => {
+        mongoose.connection.close().then(() => {
             console.log('MongoDB connection closed');
             process.exit(0);
         });
@@ -201,7 +203,7 @@ process.on('SIGINT', () => {
     server.close(() => {
         console.log('HTTP server closed');
         const mongoose = require('mongoose');
-        mongoose.connection.close(false, () => {
+        mongoose.connection.close().then(() => {
             console.log('MongoDB connection closed');
             process.exit(0);
         });

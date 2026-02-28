@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { getMenu, placeOrder, getMyOrders, seedMenu } = require('../controllers/canteenController');
+const { getMenu, placeOrder, getMyOrders, seedMenu, getAllOrders } = require('../controllers/canteenController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 router.get('/menu', protect, getMenu);
 router.post('/order', protect, placeOrder);
 router.get('/orders', protect, getMyOrders);
+router.get('/orders/all', protect, admin, getAllOrders);
 router.post('/seed', protect, admin, seedMenu);
 
 module.exports = router;

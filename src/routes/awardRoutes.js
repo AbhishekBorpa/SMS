@@ -25,6 +25,7 @@ router.route('/')
     .post(protect, teacher, createAward);
 
 router.get('/my', protect, getMyAwards);
+router.get('/private', protect, getMyAwards); // Alias used by mobile app
 router.get('/student/:id', protect, adminOrTeacher, getStudentAwards);
 
 module.exports = router;

@@ -99,7 +99,7 @@ const deleteClub = asyncHandler(async (req, res) => {
     const club = await Club.findOne({ _id: req.params.id, school: req.schoolId });
 
     if (club) {
-        await club.remove();
+        await club.deleteOne();
 
         await logAction({
             action: 'DELETE_CLUB',
@@ -172,7 +172,7 @@ const seedClubs = asyncHandler(async (req, res) => {
     const clubs = [
         { name: 'Robotics Club', description: 'Building the future, one bot at a time.', meetingDay: 'Friday', meetingTime: '3:00 PM', school: req.schoolId },
         { name: 'Debate Society', description: 'Voice your opinion and sharpen your mind.', meetingDay: 'Wednesday', meetingTime: '2:30 PM', school: req.schoolId },
-        { name: 'Eco Warriors', description: 'Making our school and planet greener.', meetingDay: 'Monday', meetingTime: '3:30 PM', school: schoolId },
+        { name: 'Eco Warriors', description: 'Making our school and planet greener.', meetingDay: 'Monday', meetingTime: '3:30 PM', school: req.schoolId },
         { name: 'Music Band', description: 'Rock out and learn instruments.', meetingDay: 'Thursday', meetingTime: '4:00 PM', school: req.schoolId },
         { name: 'Coding Club', description: 'Learn to code apps and websites.', meetingDay: 'Tuesday', meetingTime: '3:00 PM', school: req.schoolId },
     ];

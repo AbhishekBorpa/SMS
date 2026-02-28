@@ -328,6 +328,7 @@ const getAllTransactions = asyncHandler(async (req, res) => {
         .sort({ date: -1 })
         .limit(100);
 
+    res.json(schoolTransactions);
 });
 
 module.exports = {

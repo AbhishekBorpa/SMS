@@ -52,6 +52,8 @@ npm run dev
 
 ```bash
 npm start
+npm run start --clear -- --localhost
+check emulator log for better checking 
 ```
 
 ## API Documentation

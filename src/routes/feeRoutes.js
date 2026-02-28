@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getStudentsFeeStatus, updateFeeDetails, getMyFeeStatus, getFeeInvoice, getTransactionHistory, createUpiPayment, handleUpiWebhook } = require('../controllers/feeController');
+const { getStudentsFeeStatus, updateFeeDetails, getMyFeeStatus, getFeeInvoice, getTransactionHistory, createUpiPayment, handleUpiWebhook, bulkAssignFees, getAllTransactions } = require('../controllers/feeController');
 const { protect } = require('../middleware/authMiddleware');
 
 const adminOnly = (req, res, next) => {
@@ -29,5 +29,8 @@ router.get('/me', protect, getMyFeeStatus);
 
 router.post('/upi/initiate', protect, studentOnly, createUpiPayment);
 router.post('/upi/webhook', handleUpiWebhook); // Webhooks are usually public and verified by secret/signature
+
+router.get('/transactions', protect, adminOnly, getAllTransactions);
+router.post('/bulk-assign', protect, adminOnly, bulkAssignFees);
 
 module.exports = router;

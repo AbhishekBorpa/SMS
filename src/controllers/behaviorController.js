@@ -50,7 +50,20 @@ const addBehaviorPoints = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Get my behavior history (Student - self)
+// @route   GET /api/behavior/me
+// @access  Private
+const getMyBehavior = asyncHandler(async (req, res) => {
+    const records = await BehaviorRecord.find({ student: req.user._id, school: req.schoolId })
+        .populate('teacher', 'name')
+        .sort({ date: -1 });
+
+    const totalPoints = records.reduce((acc, curr) => acc + curr.points, 0);
+    res.json({ totalPoints, history: records });
+});
+
 module.exports = {
     getStudentBehavior,
     addBehaviorPoints,
+    getMyBehavior,
 };

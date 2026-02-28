@@ -4,6 +4,7 @@ const { sendMessage, getConversation, getChatTargets } = require('../controllers
 const { protect } = require('../middleware/authMiddleware');
 
 
+router.post('/', protect, sendMessage);
 router.get('/targets', protect, getChatTargets);
 router.get('/:userId', protect, getConversation);
 

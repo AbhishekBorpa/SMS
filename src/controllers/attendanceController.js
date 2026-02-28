@@ -105,7 +105,7 @@ const deleteAttendance = asyncHandler(async (req, res) => {
     const attendance = await Attendance.findOne({ _id: req.params.id, school: req.schoolId });
 
     if (attendance) {
-        await attendance.remove();
+        await attendance.deleteOne();
         res.json({ message: 'Attendance record removed' });
     } else {
         res.status(404);
